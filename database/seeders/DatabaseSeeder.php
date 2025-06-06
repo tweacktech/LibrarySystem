@@ -44,8 +44,15 @@ class DatabaseSeeder extends Seeder
                 ],
             ))->create();
 
-        $users = User::factory(7)->role('borrower')
-            ->create();
+        // Create a specific borrower account for testing
+        $testBorrower = User::factory()->role('borrower')->create([
+            'name' => 'Test Borrower',
+            'email' => 'borrower@gmail.com',
+            'password' => 'password',
+        ]);
+
+        // Create additional random borrowers
+        $users = User::factory(7)->role('borrower')->create();
 
         $publishers = Publisher::factory(10)->create();
 

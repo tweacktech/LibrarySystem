@@ -73,6 +73,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
         return match ($panel->getId()) {
             'admin' => $role == 'admin',
             'staff' => $role == 'staff',
+            'user' => $role == 'borrower',
             default => false,
         } && $this->hasVerifiedEmail();
     }
