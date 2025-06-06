@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.2",
         "barryvdh/laravel-ide-helper": "^3.5.4",
         "filament/filament": "^3.2.134",
         "filament/spatie-laravel-media-library-plugin": "^3.2.134",

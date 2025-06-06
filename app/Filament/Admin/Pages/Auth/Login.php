@@ -13,7 +13,7 @@ class Login extends BaseLogin
 
         $this->form->fill([
             'email' => 'admin@gmail.com',
-            'password' => 'developer',
+            'password' => 'Password',
         ]);
     }
 
