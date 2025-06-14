@@ -47,8 +47,8 @@ class DatabaseSeeder extends Seeder
         // Create a specific borrower account for testing
         $testBorrower = User::factory()->role('borrower')->create([
             'name' => 'Test Borrower',
-            'email' => 'borrower@gmail.com',
-            'password' => 'password',
+                    'email' => 'borrower@gmail.com',
+                    'password' => 'password',
         ]);
 
         // Create additional random borrowers

@@ -18,7 +18,8 @@
         "joshembling/image-optimizer": "^1.4.4",
         "laravel/framework": "^11.39.1",
         "laravel/sanctum": "^4.0.7",
-        "laravel/tinker": "^2.10"
+        "laravel/tinker": "^2.10",
+        "unicodeveloper/laravel-paystack": "^1.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14.10",
