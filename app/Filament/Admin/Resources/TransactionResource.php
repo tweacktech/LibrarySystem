@@ -111,6 +111,8 @@ class TransactionResource extends Resource
                                                 ? [BorrowedStatus::Borrowed->value => BorrowedStatus::Borrowed->getLabel()]
                                                 : BorrowedStatus::class
                                             )
+                                            ->default(BorrowedStatus::Borrowed->value)
+                                            ->required()
                                             ->inline()
                                             ->live(),
                                         Group::make()
@@ -171,6 +173,17 @@ class TransactionResource extends Resource
                 ActionGroup::make([
                     EditAction::make(),
                     DeleteAction::make(),
+                    Tables\Actions\Action::make('processLateReturn')
+                        ->label('Process Late Return Payment')
+                        ->icon('heroicon-o-banknotes')
+                        ->color('warning')
+                        ->visible(fn (Transaction $record): bool =>
+                            $record->status === BorrowedStatus::Delayed &&
+                            $record->fine > 0
+                        )
+                        ->action(function (Transaction $record) {
+                            return $record->processLateReturn();
+                        }),
                 ]),
             ])
             ->bulkActions([

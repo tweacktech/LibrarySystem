@@ -17,8 +17,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/books/{bookBorrow}/lost', [BookBorrowController::class, 'showLostForm'])->name('books.lost.form');
     Route::post('/books/{bookBorrow}/return', [BookBorrowController::class, 'returnBook'])->name('books.return');
     Route::post('/books/{bookBorrow}/lost', [BookBorrowController::class, 'markAsLost'])->name('books.lost');
+    Route::get('/payment/process/{reference}', [App\Http\Controllers\PaymentController::class, 'process'])->name('payment.process');
+    Route::get('/payment/verify', [App\Http\Controllers\PaymentController::class, 'verify'])->name('payment.verify');
 });
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
 });

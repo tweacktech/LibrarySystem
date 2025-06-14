@@ -6,9 +6,11 @@ return [
     | Library Settings
     |--------------------------------------------------------------------------
     |
-    | This file contains all the settings for the library system
+    | This file contains all the configurable settings for the library system.
     |
     */
+
+    'fine_per_day' => env('LIBRARY_FINE_PER_DAY', 10),
 
     // Daily rate for late returns (in naira)
     'late_return_daily_rate' => env('LATE_RETURN_DAILY_RATE', 100),

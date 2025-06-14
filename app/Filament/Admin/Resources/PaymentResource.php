@@ -16,13 +16,17 @@ class PaymentResource extends Resource
 {
     protected static ?string $model = Payment::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $navigationGroup = 'Library Management';
+    protected static ?string $navigationGroup = 'Finance';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Payments';
+
+    protected static ?string $modelLabel = 'Payment';
+
+    protected static ?string $pluralModelLabel = 'Payments';
 
     protected static ?string $slug = 'payments';
 
@@ -52,10 +56,14 @@ class PaymentResource extends Resource
             ->schema([
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->required(),
+                    ->required()
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\Select::make('book_id')
                     ->relationship('book', 'title')
-                    ->nullable(),
+                    ->required()
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric()
@@ -77,7 +85,7 @@ class PaymentResource extends Resource
                     ->required()
                     ->unique(ignoreRecord: true),
                 Forms\Components\KeyValue::make('payment_details')
-                    ->nullable(),
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -97,37 +105,46 @@ class PaymentResource extends Resource
                 Tables\Columns\TextColumn::make('amount')
                     ->money('NGN')
                     ->sortable(),
-                Tables\Columns\BadgeColumn::make('payment_type')
-                    ->colors([
-                        'warning' => 'late_return',
-                        'danger' => 'lost_book',
-                    ])
-                    ->formatStateUsing(fn (string $state): string => ucfirst(str_replace('_', ' ', $state))),
-                Tables\Columns\BadgeColumn::make('status')
-                    ->colors([
-                        'success' => 'completed',
-                        'warning' => 'pending',
-                        'danger' => 'failed',
-                    ]),
+                Tables\Columns\TextColumn::make('payment_type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'late_return' => 'warning',
+                        'lost_book' => 'danger',
+                        default => 'gray',
+                    }),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'completed' => 'success',
+                        'pending' => 'warning',
+                        'failed' => 'danger',
+                        default => 'gray',
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('payment_type')
-                    ->options([
-                        'late_return' => 'Late Return',
-                        'lost_book' => 'Lost Book',
-                    ]),
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
                         'pending' => 'Pending',
                         'completed' => 'Completed',
                         'failed' => 'Failed',
                     ]),
+                Tables\Filters\SelectFilter::make('payment_type')
+                    ->options([
+                        'late_return' => 'Late Return',
+                        'lost_book' => 'Lost Book',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -148,7 +165,6 @@ class PaymentResource extends Resource
         return [
             'index' => Pages\ListPayments::route('/'),
             'create' => Pages\CreatePayment::route('/create'),
-            'view' => Pages\ViewPayment::route('/{record}'),
             'edit' => Pages\EditPayment::route('/{record}/edit'),
         ];
     }
