@@ -40,7 +40,15 @@
     <!-- Pending Payments -->
     @if($pendingPayments->isNotEmpty())
     <div class="mt-8">
-        <h3 class="text-lg font-medium text-gray-900">Pending Payments</h3>
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-medium text-gray-900">Pending Payments</h3>
+            @if(Auth::user()->is_admin)
+                <a href="{{ route('filament.admin.resources.payments.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    View All Payments
+                </a>
+            @endif
+        </div>
         <div class="mt-4 bg-white overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
                 <div class="overflow-x-auto">
@@ -95,7 +103,15 @@
     <!-- Recent Payments -->
     @if($payments->isNotEmpty())
     <div class="mt-8">
-        <h3 class="text-lg font-medium text-gray-900">Recent Payments</h3>
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-medium text-gray-900">Recent Payments</h3>
+            @if(Auth::user()->is_admin)
+                <a href="{{ route('filament.admin.resources.payments.index') }}" 
+                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    View All Payments
+                </a>
+            @endif
+        </div>
         <div class="mt-4 bg-white overflow-hidden shadow-sm rounded-lg">
             <div class="p-6">
                 <div class="overflow-x-auto">
