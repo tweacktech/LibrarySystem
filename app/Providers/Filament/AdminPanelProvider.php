@@ -36,7 +36,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->resources([
-                \App\Filament\Admin\Resources\PaymentResource::class,
+                PaymentResource::class,
             ])
             ->pages([
                 Pages\Dashboard::class,

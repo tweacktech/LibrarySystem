@@ -47,7 +47,7 @@ class PaymentResource extends Resource
 
     public static function getRouteBaseName(?string $panel = null): string
     {
-        return 'admin.payments';
+        return 'filament.admin.resources.payments';
     }
 
     public static function form(Form $form): Form

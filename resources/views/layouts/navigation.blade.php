@@ -17,7 +17,7 @@
                     </x-nav-link>
 
                     @if(Auth::user()->is_admin)
-                        <x-nav-link :href="route('admin.payments.index')" :active="request()->routeIs('admin.payments.*')">
+                        <x-nav-link :href="route('filament.admin.resources.payments.index')" :active="request()->routeIs('filament.admin.resources.payments.*')">
                             {{ __('Payments') }}
                         </x-nav-link>
                     @endif
@@ -78,7 +78,7 @@
             </x-responsive-nav-link>
 
             @if(Auth::user()->is_admin)
-                <x-responsive-nav-link :href="route('admin.payments.index')" :active="request()->routeIs('admin.payments.*')">
+                <x-responsive-nav-link :href="route('filament.admin.resources.payments.index')" :active="request()->routeIs('filament.admin.resources.payments.*')">
                     {{ __('Payments') }}
                 </x-responsive-nav-link>
             @endif
