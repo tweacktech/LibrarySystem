@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (!Schema::hasTable('settings')) {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
 
@@ -28,5 +29,6 @@ return new class extends Migration
 
             $table->nullableTimestamps();
         });
+    }
     }
 };
