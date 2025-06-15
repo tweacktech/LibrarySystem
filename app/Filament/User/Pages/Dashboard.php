@@ -2,6 +2,7 @@
 
 namespace App\Filament\User\Pages;
 
+use App\Filament\User\Widgets\AvailableBooksForReservation;
 use App\Filament\User\Widgets\BorrowedBooksOverview;
 use Filament\Pages\Page;
 
@@ -11,13 +12,7 @@ class Dashboard extends Page
     protected static string $view = 'filament-panels::pages.dashboard';
     protected static ?string $title = 'Dashboard';
 
-    public function getHeaderWidgets(): array
-    {
-        return [
-            BorrowedBooksOverview::class,
-        ];
-    }
-
+  
     protected function getColumns(): int | array
     {
         return 3;
@@ -27,6 +22,7 @@ class Dashboard extends Page
     {
         return [
             BorrowedBooksOverview::class,
+            AvailableBooksForReservation::class,
         ];
     }
-} 
+}

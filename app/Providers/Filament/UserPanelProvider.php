@@ -78,6 +78,9 @@ class UserPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->spa();
+            ->spa()
+            ->resources([
+                \App\Filament\Resources\BookReservationResource::class,
+            ]);
     }
 }

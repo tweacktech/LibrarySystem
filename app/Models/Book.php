@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Book extends Model implements HasMedia
 {
@@ -15,22 +16,21 @@ class Book extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $fillable = [
-        'author_id',
-        'publisher_id',
-        'genre_id',
         'title',
-        'cover_image',
+        'author',
         'isbn',
-        'price',
+        'publication_year',
+        'publisher',
+        'copies',
+        'available_copies',
+        'genre_id',
         'description',
-        'stock',
-        'available',
-        'published',
     ];
 
     protected $casts = [
-        'available' => 'boolean',
-        'published' => 'date',
+        'publication_year' => 'integer',
+        'copies' => 'integer',
+        'available_copies' => 'integer',
     ];
 
     public function author(): BelongsTo
@@ -46,6 +46,30 @@ class Book extends Model implements HasMedia
     public function genre(): BelongsTo
     {
         return $this->belongsTo(Genre::class);
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function reservations(): HasMany
+    {
+        return $this->hasMany(BookReservation::class);
+    }
+
+    public function decreaseAvailableCopies(): void
+    {
+        if ($this->available_copies > 0) {
+            $this->decrement('available_copies');
+        }
+    }
+
+    public function increaseAvailableCopies(): void
+    {
+        if ($this->available_copies < $this->copies) {
+            $this->increment('available_copies');
+        }
     }
 
     public static function booted(): void
