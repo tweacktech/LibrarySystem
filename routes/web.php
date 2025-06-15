@@ -18,4 +18,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/books/{bookBorrow}/lost', [BookBorrowController::class, 'markAsLost'])->name('books.lost');
     Route::get('/payment/process/{reference}', [App\Http\Controllers\PaymentController::class, 'process'])->name('payment.process');
     Route::get('/payment/verify', [App\Http\Controllers\PaymentController::class, 'verify'])->name('payment.verify');
+    Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleCallback'])
+        ->name('payment.callback');
 });

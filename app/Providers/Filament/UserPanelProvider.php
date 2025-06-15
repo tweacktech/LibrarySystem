@@ -5,6 +5,8 @@ namespace App\Providers\Filament;
 use App\Filament\User\Pages\Auth\EditProfile;
 use App\Filament\User\Pages\Auth\Login;
 use App\Filament\User\Pages\Auth\Register;
+use App\Filament\User\Pages\MakePayment;
+use App\Filament\User\Pages\Payments;
 use App\Settings\GeneralSettings;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -55,6 +57,8 @@ class UserPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')
             ->pages([
                 Pages\Dashboard::class,
+                Payments::class,
+                MakePayment::class,
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
             ->widgets([
@@ -76,4 +80,4 @@ class UserPanelProvider extends PanelProvider
             ])
             ->spa();
     }
-} 
+}
