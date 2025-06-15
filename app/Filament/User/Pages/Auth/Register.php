@@ -22,6 +22,13 @@ class Register extends BaseRegister
                 $this->getEmailFormComponent(),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
+                TextInput::make('department')
+                    ->required()
+                    ->maxLength(255),
+                TextInput::make('id_number')
+                    ->required()
+                    ->unique('users', 'id_number')
+                    ->maxLength(255),
             ])
             ->statePath('data');
     }
@@ -33,6 +40,8 @@ class Register extends BaseRegister
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role_id' => Role::getId(Role::IS_BORROWER),
+            'department' => $data['department'],
+            'id_number' => $data['id_number'],
         ]);
 
         event(new Registered($user));
@@ -44,4 +53,4 @@ class Register extends BaseRegister
     {
         return route('filament.user.pages.dashboard');
     }
-} 
+}

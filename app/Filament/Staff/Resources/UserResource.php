@@ -70,6 +70,13 @@ class UserResource extends Resource
                                         TextInput::make('address'),
                                         TextInput::make('phone')
                                             ->tel(),
+                                        TextInput::make('department')
+                                            ->required()
+                                            ->maxLength(255),
+                                        TextInput::make('id_number')
+                                            ->required()
+                                            ->unique(ignoreRecord: true)
+                                            ->maxLength(255),
                                     ])->columns(2),
                             ])->columnSpan(['sm' => 2, 'md' => 2, 'xxl' => 5]),
                         Group::make()
