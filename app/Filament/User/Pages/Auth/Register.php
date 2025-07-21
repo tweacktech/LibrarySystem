@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Pages\Auth\Register as BaseRegister;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
+use Filament\Notifications\Notification;
 
 class Register extends BaseRegister
 {
@@ -46,11 +47,19 @@ class Register extends BaseRegister
 
         event(new Registered($user));
 
+        // Show notification
+        Notification::make()
+            ->title('Account created successfully!')
+            ->body('Waiting for verification.')
+            ->success()
+            ->send();
+
         return $user;
     }
 
-    protected function getRedirectUrl(): string
+    // Remove or override the getRedirectUrl method to prevent redirect after registration
+    protected function getRedirectUrl(): ?string
     {
-        return route('filament.user.pages.dashboard');
+        return null; // Stay on the registration page
     }
 }
