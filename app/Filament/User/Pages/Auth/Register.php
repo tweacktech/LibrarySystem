@@ -43,6 +43,7 @@ class Register extends BaseRegister
             'role_id' => Role::getId(Role::IS_BORROWER),
             'department' => $data['department'],
             'id_number' => $data['id_number'],
+            'email_verified_at' => now(), // Auto-verify email
         ]);
 
         event(new Registered($user));
@@ -50,16 +51,16 @@ class Register extends BaseRegister
         // Show notification
         Notification::make()
             ->title('Account created successfully!')
-            ->body('Waiting for verification.')
+            ->body('You can now login with your credentials.')
             ->success()
             ->send();
 
         return $user;
     }
 
-    // Remove or override the getRedirectUrl method to prevent redirect after registration
+    // Redirect to login page after successful registration
     protected function getRedirectUrl(): ?string
     {
-        return null; // Stay on the registration page
+        return route('filament.user.auth.login');
     }
 }

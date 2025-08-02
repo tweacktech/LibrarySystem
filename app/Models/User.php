@@ -7,7 +7,6 @@ use Filament\AvatarProviders\UiAvatarsProvider;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 #[ObservedBy(UserObserver::class)]
-class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasApiTokens;
     use HasFactory;
@@ -41,6 +40,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
         'avatar_url',
         'department',
         'id_number',
+        'email_verified_at',
     ];
 
     /**
@@ -82,7 +82,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerif
             'staff' => $role == 'staff',
             'user' => $role == 'borrower',
             default => false,
-        } && $this->hasVerifiedEmail();
+        };
     }
 
     public function getFilamentAvatarUrl(): ?string
