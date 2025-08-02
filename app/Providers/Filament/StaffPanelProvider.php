@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use App\Filament\Staff\Pages\Auth\EditProfile;
 use App\Filament\Staff\Pages\Auth\Login;
-use App\Filament\Staff\Pages\Auth\Register;
 use App\Settings\GeneralSettings;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -31,13 +30,12 @@ class StaffPanelProvider extends PanelProvider
             ->id('staff')
             ->path('staff')
             ->login(Login::class)
-            ->registration(Register::class)
             ->passwordReset()
             ->profile(EditProfile::class)
             ->emailVerification()
-            ->favicon(fn (GeneralSettings $settings) => Storage::disk('public')
-                ->url($settings->site_favicon))
-            ->brandName(fn (GeneralSettings $settings) => $settings->site_name)
+            // ->favicon(fn (GeneralSettings $settings) => Storage::disk('public')
+            //     ->url($settings->site_favicon))
+            // ->brandName(fn (GeneralSettings $settings) => $settings->site_name)
             ->brandLogo(fn (GeneralSettings $settings) => Storage::disk('public')
                 ->url($settings->site_logo))
             ->darkModeBrandLogo(function (GeneralSettings $settings) {

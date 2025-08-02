@@ -37,9 +37,9 @@ class UserPanelProvider extends PanelProvider
             ->passwordReset()
             ->profile(EditProfile::class)
             ->emailVerification()
-            ->favicon(fn (GeneralSettings $settings) => Storage::disk('public')
-                ->url($settings->site_favicon))
-            ->brandName(fn (GeneralSettings $settings) => $settings->site_name)
+            // ->favicon(fn (GeneralSettings $settings) => Storage::disk('public')
+            //     ->url($settings->site_favicon))
+            // ->brandName(fn (GeneralSettings $settings) => $settings->site_name)
             ->brandLogo(fn (GeneralSettings $settings) => Storage::disk('public')
                 ->url($settings->site_logo))
             ->darkModeBrandLogo(function (GeneralSettings $settings) {

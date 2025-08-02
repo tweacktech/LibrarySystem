@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Pages\Auth;
 
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Login as BaseLogin;
 
@@ -21,9 +22,17 @@ class Login extends BaseLogin
     {
         return $form
             ->schema([
+                Placeholder::make('logo')
+                    ->content(view('components.plasu-logo'))
+                    ->columnSpanFull(),
                 $this->getEmailFormComponent()->label('Email'),
                 $this->getPasswordFormComponent(),
                 $this->getRememberFormComponent(),
             ]);
+    }
+
+    public function getHeading(): string
+    {
+        return 'Admin Login';
     }
 }

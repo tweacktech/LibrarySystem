@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Forms\Components\Component;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Register as BaseRegister;
@@ -19,6 +20,9 @@ class Register extends BaseRegister
     {
         return $form
             ->schema([
+                Placeholder::make('logo')
+                    ->content(view('components.plasu-logo'))
+                    ->columnSpanFull(),
                 $this->getNameFormComponent(),
                 $this->getEmailFormComponent(),
                 $this->getPasswordFormComponent(),
@@ -32,6 +36,11 @@ class Register extends BaseRegister
                     ->maxLength(255),
             ])
             ->statePath('data');
+    }
+
+    public function getHeading(): string
+    {
+        return 'User Registration';
     }
 
     protected function handleRegistration(array $data): User
