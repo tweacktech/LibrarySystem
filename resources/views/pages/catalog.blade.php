@@ -42,47 +42,7 @@
 </head>
 <body style="padding:10px;">
 
-<!-- Navigation Section -->
-<section class="menu menu2 cid-uNkyFLQFKp" once="menu" id="menu-5-uNkyFLQFKp">
-  <nav class="navbar navbar-dropdown navbar-fixed-top navbar-expand-lg opacityScroll">
-    <div class="container">
-      <div class="navbar-brand">
-        <span class="navbar-logo">
-          <a href="/">
-            <img src="{{ asset('Design_files/Untitled_011.jpeg')}}" style="height: 4.3rem;">
-          </a>
-        </span>
-        <span class="navbar-caption-wrap">
-          <a class="navbar-caption text-black display-4" href="/">PlasuLib</a>
-        </span>
-      </div>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-        <div class="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
-      <div class="collapse navbar-collapse opacityScroll" id="navbarSupportedContent">
-        <ul class="navbar-nav nav-dropdown" data-app-modern-menu="true">
-          <li class="nav-item">
-            <a class="nav-link link text-black display-4" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link link text-black display-4" href="/catalog" aria-expanded="false">Catalog</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link link text-black display-4" href="/about">About</a>
-          </li>
-        </ul>
-        <div class="navbar-buttons mbr-section-btn">
-          <a class="btn btn-primary display-4" href="/user/dashboard">Login</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-</section>
+@include('components.header')
 
 <!-- Hero Section -->
 <section class="header18 cid-uNkyFLQgLD mbr-fullscreen" data-bg-video="https://www.youtube.com/embed/vhG5usAFL_g?autoplay=1&amp;loop=1&amp;playlist=vhG5usAFL_g&amp;t=20&amp;mute=1&amp;playsinline=1&amp;controls=0&amp;showinfo=0&amp;autohide=1&amp;allowfullscreen=true&amp;mode=transparent" id="hero-15-uNkyFLQgLD">
@@ -262,76 +222,8 @@
   </div>
 </section>
 
-<!-- Footer -->
-<section class="footer3 cid-uNkyFLRjqw" once="footers" id="footer-3-uNkyFLRjqw" style="padding-top: 6rem; padding-bottom: 6rem; background-color: #000000;">
-  <div class="container">
-    <div class="row">
-      <div class="row-links">
-        <ul class="header-menu">
-          <li class="header-menu-item mbr-fonts-style display-5 animate__animated animate__delay-1s animate__fadeIn">
-            <a href="/about" class="text-white animate__animated animate__delay-1s animate__fadeIn">About</a>
-          </li>
-          <li class="header-menu-item mbr-fonts-style display-5 animate__animated animate__delay-1s animate__fadeIn">
-            <a href="#" class="text-white animate__animated animate__delay-1s animate__fadeIn">Terms</a>
-          </li>
-          <li class="header-menu-item mbr-fonts-style display-5 animate__animated animate__delay-1s animate__fadeIn">
-            <a href="#" class="text-white animate__animated animate__delay-1s animate__fadeIn">Privacy</a>
-          </li>
-          <li class="header-menu-item mbr-fonts-style display-5 animate__animated animate__delay-1s animate__fadeIn">
-            <a href="#" class="text-white animate__animated animate__delay-1s animate__fadeIn">Contact</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="col-12 mt-4">
-        <div class="social-row">
-          <div class="soc-item">
-            <a href="#" target="_blank" class="animate__animated animate__delay-1s animate__fadeIn">
-              <span class="mbr-iconfont socicon socicon-facebook display-7"></span>
-            </a>
-          </div>
-          <div class="soc-item">
-            <a href="#" target="_blank" class="animate__animated animate__delay-1s animate__fadeIn">
-              <span class="mbr-iconfont socicon-twitter socicon"></span>
-            </a>
-          </div>
-          <div class="soc-item">
-            <a href="#" target="_blank" class="animate__animated animate__delay-1s animate__fadeIn">
-              <span class="mbr-iconfont socicon-instagram socicon"></span>
-            </a>
-          </div>
-          <div class="soc-item">
-            <a href="#" target="_blank" class="animate__animated animate__delay-1s animate__fadeIn">
-              <span class="mbr-iconfont socicon socicon-linkedin"></span>
-            </a>
-          </div>
-          <div class="soc-item">
-            <a href="#" target="_blank" class="animate__animated animate__delay-1s animate__fadeIn">
-              <span class="mbr-iconfont socicon socicon-twitch"></span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 mt-5">
-        <p class="mbr-fonts-style copyright display-7 animate__animated animate__delay-1s animate__fadeIn">
-          © 2025 Plasu University
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<script src="{{ asset('Design_files/jarallax.js')}}"></script>
-<script src="{{ asset('Design_files/bootstrap.bundle.min.js')}}"></script>
-<script src="{{ asset('Design_files/navbar-dropdown.js')}}"></script>
-<script src="{{ asset('Design_files/scroll-gallery.js')}}"></script>
-<script src="{{ asset('Design_files/mbr-switch-arrow.js')}}"></script>
-<script src="{{ asset('Design_files/smooth-scroll.js')}}"></script>
-<script src="{{ asset('Design_files/index.js')}}"></script>
-<script src="{{ asset('Design_files/script.js')}}"></script>
-<script src="{{ asset('Design_files/formoid.min.js')}}"></script>
-<script src="{{ asset('Design_files/preview.js')}}"></script>
+@include('components.footer')
+@include('components.scripts')
 
 </body>
 </html>
