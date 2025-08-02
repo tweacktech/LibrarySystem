@@ -636,10 +636,10 @@
             <a class="nav-link link text-black display-4" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link link text-black display-4" href="#" aria-expanded="false">Catalog</a>
+            <a class="nav-link link text-black display-4" href="/catalog" aria-expanded="false">Catalog</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link link text-black display-4" href="#">About</a>
+            <a class="nav-link link text-black display-4" href="/about">About</a>
           </li>
         </ul>
         <div class="navbar-buttons mbr-section-btn">
@@ -1895,7 +1895,7 @@ the Plasu University Library. </p>
             <div class="row-links">
                 <ul class="header-menu">
                 <li class="header-menu-item mbr-fonts-style display-5 animate__animated animate__delay-1s animate__fadeIn">
-                    <a href="#" class="text-white animate__animated animate__delay-1s animate__fadeIn">About</a>
+                    <a href="/about" class="text-white animate__animated animate__delay-1s animate__fadeIn">About</a>
                   </li><li class="header-menu-item mbr-fonts-style display-5 animate__animated animate__delay-1s animate__fadeIn">
                     <a href="#" class="text-white animate__animated animate__delay-1s animate__fadeIn">Terms</a>
                   </li><li class="header-menu-item mbr-fonts-style display-5 animate__animated animate__delay-1s animate__fadeIn">

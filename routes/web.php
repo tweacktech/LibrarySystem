@@ -4,10 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\BookBorrowController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PageController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/catalog', [PageController::class, 'catalog'])->name('catalog');
+Route::get('/about', [PageController::class, 'about'])->name('about');
 
 Route::get('/payment/verify', [PaymentController::class, 'verify'])->name('payment.verify');
 
