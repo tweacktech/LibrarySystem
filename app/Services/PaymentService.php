@@ -27,6 +27,11 @@ class PaymentService
             ],
         ]);
 
+        // Only redirect if we're in a web context, not admin panel
+        if (request()->expectsJson() || request()->is('admin/*') || request()->is('staff/*')) {
+            return $payment;
+        }
+
         $paymentData = [
             'amount' => $amount * 100, // Convert to kobo
             'email' => $user->email,
@@ -39,6 +44,25 @@ class PaymentService
         ];
 
         return Paystack::getAuthorizationUrl($paymentData)->redirectNow();
+    }
+
+    public function createLateReturnPayment(User $user, Book $book, int $daysLate)
+    {
+        $dailyRate = config('library.late_return_daily_rate', 100);
+        $amount = $daysLate * $dailyRate;
+
+        return Payment::create([
+            'user_id' => $user->id,
+            'book_id' => $book->id,
+            'amount' => $amount,
+            'payment_type' => 'late_return',
+            'status' => 'pending',
+            'payment_reference' => 'LATE_' . uniqid(),
+            'payment_details' => [
+                'days_late' => $daysLate,
+                'daily_rate' => $dailyRate,
+            ],
+        ]);
     }
 
     public function initializeLostBookPayment(User $user, Book $book, float $price)

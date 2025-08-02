@@ -6,6 +6,7 @@ use App\Enums\BorrowedStatus;
 use App\Models\Transaction;
 use App\Models\User;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionObserver
 {
@@ -35,7 +36,12 @@ class TransactionObserver
      */
     public function updated(Transaction $transaction): void
     {
-        if (auth()->user()->role->name == 'staff' && $transaction->status == BorrowedStatus::Returned) {
+        // Only send notifications if we have an authenticated user
+        if (!Auth::check() || !Auth::user()->role) {
+            return;
+        }
+
+        if (Auth::user()->role->name == 'staff' && $transaction->status == BorrowedStatus::Returned) {
             Notification::make()
                 ->title('A Borrower Returned a book')
                 ->body($transaction->user->name.' returned a book on time')
@@ -44,7 +50,7 @@ class TransactionObserver
                 ->sendToDatabase($this->admin);
         }
 
-        if (auth()->user()->role->name == 'staff' && $transaction->status == BorrowedStatus::Delayed) {
+        if (Auth::user()->role->name == 'staff' && $transaction->status == BorrowedStatus::Delayed) {
             Notification::make()
                 ->title('A Borrower Delayed to return a book')
                 ->body(

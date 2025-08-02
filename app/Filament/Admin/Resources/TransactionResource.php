@@ -97,7 +97,7 @@ class TransactionResource extends Resource
                                                 || $get('status') === 'delayed')
                                             ->afterOrEqual('borrowed_date')
                                             ->live()
-                                            ->required(fn (string $context) => $context === 'edit')
+                                            ->required(fn (Get $get): bool => $get('status') === 'returned' || $get('status') === 'delayed')
                                             ->columnSpanFull(),
                                     ])->columns(2),
                             ])->columnSpan(['sm' => 2, 'md' => 2, 'xxl' => 5]),
@@ -118,23 +118,30 @@ class TransactionResource extends Resource
                                         Group::make()
                                             ->schema([
                                                 Placeholder::make('fine')
-                                                    ->label('$10 Per Day After Delay')
+                                                    ->label('$' . config('library.fine_per_day', 10) . ' Per Day After Delay')
                                                     ->content(
                                                         function (Get $get): string {
                                                             $borrowedDate = $get('borrowed_date');
                                                             $borrowedFor = $get('borrowed_for');
                                                             $returnedDate = $get('returned_date');
+                                                            
+                                                            if (!$borrowedDate || !$borrowedFor || !$returnedDate) {
+                                                                return '0 Days x $' . config('library.fine_per_day', 10) . ' = $0.00';
+                                                            }
+                                                            
                                                             $borrowedDate = Carbon::parse($borrowedDate);
                                                             $returnedDate = Carbon::parse($returnedDate);
                                                             $dueDate = $borrowedDate->copy()->addDays($borrowedFor);
                                                             $delay = 0;
                                                             $fine = 0;
+                                                            $finePerDay = config('library.fine_per_day', 10);
+                                                            
                                                             if ($returnedDate->gt($dueDate)) {
                                                                 $delay = $dueDate->diffInDays($returnedDate);
-                                                                $fine = $delay * 10;
+                                                                $fine = $delay * $finePerDay;
                                                             }
 
-                                                            return $delay.' Days x $10 = $'.number_format($fine, 2);
+                                                            return $delay.' Days x $'.$finePerDay.' = $'.number_format($fine, 2);
                                                         }
                                                     )
                                                     ->live()

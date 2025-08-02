@@ -56,7 +56,7 @@ class Transaction extends Model
 
         if ($daysLate > 0) {
             $paymentService = app(PaymentService::class);
-            return $paymentService->initializeLateReturnPayment($this->user, $this->book, $daysLate);
+            return $paymentService->createLateReturnPayment($this->user, $this->book, $daysLate);
         }
 
         return null;
@@ -74,7 +74,7 @@ class Transaction extends Model
         static::saving(function ($transaction) {
             $borrowedDate = Carbon::parse($transaction->borrowed_date);
             $borrowedFor = (int) $transaction->borrowed_for;
-            $dueDate = $borrowedDate->addDays($borrowedFor);
+            $dueDate = $borrowedDate->copy()->addDays($borrowedFor);
             $delay = 0;
             $fine = 0;
 
@@ -83,23 +83,19 @@ class Transaction extends Model
                 $returnDate = Carbon::parse($transaction->returned_date);
                 if ($returnDate->gt($dueDate)) {
                     $delay = $dueDate->diffInDays($returnDate);
-                    $fine = $delay * Config::get('library.fine_per_day');
+                    $fine = $delay * Config::get('library.fine_per_day', 10);
                 }
             } else {
                 // If no returned date, check if the book is overdue
                 $now = Carbon::now();
                 if ($now->gt($dueDate)) {
                     $delay = $dueDate->diffInDays($now);
-                    $fine = $delay * Config::get('library.fine_per_day');
+                    $fine = $delay * Config::get('library.fine_per_day', 10);
                 }
             }
 
-            // Create a pending payment if the status is being changed to Delayed
-            if ($transaction->isDirty('status') && $transaction->status === BorrowedStatus::Delayed && $fine > 0) {
-                $paymentService = app(PaymentService::class);
-                $paymentService->initializeLateReturnPayment($transaction->user, $transaction->book, $delay);
-            }
-
+            // Only update fine, don't automatically create payment in saving event
+            // Payment creation should be handled manually or through a separate action
             $transaction->fine = $fine;
         });
 

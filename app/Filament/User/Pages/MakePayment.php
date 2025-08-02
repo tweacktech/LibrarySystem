@@ -46,19 +46,35 @@ class MakePayment extends Page implements HasForms
                 Select::make('transaction_id')
                     ->label('Select Transaction')
                     ->options(function () {
-                        return Transaction::where('user_id', Auth::id())
+                        $transactions = Transaction::where('user_id', Auth::id())
                             ->whereIn('status', [BorrowedStatus::Borrowed, BorrowedStatus::Delayed])
                             ->with('book')
                             ->get()
+                            ->filter(function ($transaction) {
+                                // Include delayed transactions
+                                if ($transaction->status === BorrowedStatus::Delayed) {
+                                    return true;
+                                }
+                                
+                                // Include borrowed transactions that are overdue
+                                $dueDate = $transaction->borrowed_date->addDays($transaction->borrowed_for);
+                                return now()->isAfter($dueDate);
+                            })
                             ->mapWithKeys(function ($transaction) {
                                 $label = $transaction->book->title;
+                                $dueDate = $transaction->borrowed_date->addDays($transaction->borrowed_for);
+                                
                                 if ($transaction->status === BorrowedStatus::Delayed) {
-                                    $label .= ' (Overdue)';
+                                    $daysOverdue = $dueDate->diffInDays(now());
+                                    $label .= " (Overdue by {$daysOverdue} days)";
                                 } else {
-                                    $label .= ' (Currently Borrowed)';
+                                    $daysOverdue = $dueDate->diffInDays(now());
+                                    $label .= " (Overdue by {$daysOverdue} days)";
                                 }
                                 return [$transaction->id => $label];
                             });
+                            
+                        return $transactions;
                     })
                     ->required()
                     ->searchable()
@@ -81,7 +97,12 @@ class MakePayment extends Page implements HasForms
                         }
 
                         $options = [];
-                        if ($transaction->status === BorrowedStatus::Delayed) {
+                        
+                        // Check if transaction is overdue (either delayed status or borrowed but past due date)
+                        $dueDate = $transaction->borrowed_date->addDays($transaction->borrowed_for);
+                        $isOverdue = $transaction->status === BorrowedStatus::Delayed || now()->isAfter($dueDate);
+                        
+                        if ($isOverdue) {
                             $options['late_return'] = 'Late Return Payment';
                         }
                         $options['lost_book'] = 'Lost Book Payment';
@@ -95,9 +116,16 @@ class MakePayment extends Page implements HasForms
                             $transaction = Transaction::with('book')->find($get('transaction_id'));
                             if ($transaction) {
                                 if ($state === 'late_return') {
+                                    // Calculate overdue days
                                     $dueDate = $transaction->borrowed_date->addDays($transaction->borrowed_for);
-                                    $daysOverdue = now()->isAfter($dueDate) ? $dueDate->diffInDays(now()) : 0;
-                                    $dailyRate = (float) config('library.late_return_daily_rate', 100);
+                                    $daysOverdue = 0;
+                                    
+                                    if (now()->isAfter($dueDate)) {
+                                        $daysOverdue = $dueDate->diffInDays(now());
+                                    }
+                                    
+                                    // Use the fine_per_day from library config for consistency
+                                    $dailyRate = (float) config('library.fine_per_day', 10);
                                     $amount = $daysOverdue * $dailyRate;
                                 } else {
                                     $multiplier = (float) config('library.lost_book_multiplier', 2);
@@ -114,7 +142,33 @@ class MakePayment extends Page implements HasForms
                     ->prefix('₦')
                     ->readOnly()
                     ->default(0)
-                    ->helperText('Amount is calculated based on payment type and transaction'),
+                    ->helperText(function ($get) {
+                        $transactionId = $get('transaction_id');
+                        $paymentType = $get('payment_type');
+                        
+                        if (!$transactionId || !$paymentType) {
+                            return 'Amount is calculated based on payment type and transaction';
+                        }
+                        
+                        $transaction = Transaction::find($transactionId);
+                        if (!$transaction) {
+                            return 'Amount is calculated based on payment type and transaction';
+                        }
+                        
+                        if ($paymentType === 'late_return') {
+                            $dueDate = $transaction->borrowed_date->addDays($transaction->borrowed_for);
+                            $daysOverdue = 0;
+                            if (now()->isAfter($dueDate)) {
+                                $daysOverdue = $dueDate->diffInDays(now());
+                            }
+                            $dailyRate = config('library.fine_per_day', 10);
+                            return "Late return fine: {$daysOverdue} days × ₦{$dailyRate} per day";
+                        } else {
+                            $multiplier = config('library.lost_book_multiplier', 2);
+                            return "Lost book charge: Book price × {$multiplier} multiplier";
+                        }
+                    })
+                    ->live(),
             ])
             ->statePath('data')
             ->columns(1);
