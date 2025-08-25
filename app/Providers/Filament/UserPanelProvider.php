@@ -7,6 +7,10 @@ use App\Filament\User\Pages\Auth\Login;
 use App\Filament\User\Pages\Auth\Register;
 use App\Filament\User\Pages\MakePayment;
 use App\Filament\User\Pages\Payments;
+use App\Filament\User\Pages\TransactionHistory;
+use App\Filament\User\Resources\BookReservationResource;
+use App\Filament\User\Resources\BookResource;
+use App\Filament\User\Widgets\AccountWidget;
 use App\Settings\GeneralSettings;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -15,7 +19,6 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use App\Filament\User\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -53,12 +56,16 @@ class UserPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
-            ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
+            ->resources([
+                BookResource::class,
+                BookReservationResource::class,
+            ])
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')
             ->pages([
                 Pages\Dashboard::class,
                 Payments::class,
                 MakePayment::class,
+                TransactionHistory::class,
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
             ->widgets([
@@ -78,9 +85,6 @@ class UserPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->spa()
-            ->resources([
-                \App\Filament\Resources\BookReservationResource::class,
-            ]);
+            ->spa();
     }
 }

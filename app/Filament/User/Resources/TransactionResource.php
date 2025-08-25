@@ -16,8 +16,8 @@ class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
-    protected static ?string $navigationLabel = 'My Borrowings';
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Transactions';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -100,4 +100,4 @@ class TransactionResource extends Resource
         return parent::getEloquentQuery()
             ->where('user_id', Auth::id());
     }
-} 
+}
